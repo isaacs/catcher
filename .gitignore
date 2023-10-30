@@ -1,0 +1,4 @@
+/node_modules
+/.tap
+/dist
+/docs

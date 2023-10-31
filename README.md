@@ -8,7 +8,7 @@ cases where it won't be used anyway.
 ## USAGE
 
 ```js
-import { catcher, catchWrap } from '@isaacs/cached'
+import { catcher, catchWrap } from '@isaacs/catcher'
 import { functionThatMightThrow } from 'some-module'
 
 const resultOrUndefined = catcher(functionThatMightThrow)

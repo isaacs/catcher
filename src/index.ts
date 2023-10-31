@@ -1,3 +1,10 @@
+const stlProp = Object.getOwnPropertyDescriptor(
+  Error,
+  'stackTraceLimit'
+)
+const hasSTL =
+  stlProp && stlProp.writable && typeof stlProp.value === 'number'
+
 /**
  * Run the supplied arity-zero function, and if it throws an error, return the
  * `caughtValue` instead (or `undefined` if not provided).
@@ -7,22 +14,30 @@
  * paths where a function is expected to throw often (for example, calling
  * `statSync` on many paths to find the first one that exists).
  */
-export function catcher<R>(fn: () => R): R | undefined
-export function catcher<R, E>(fn: () => R, caughtValue: E): R | E
-export function catcher<R, E>(fn: () => R, caughtValue?: E) {
+export function catcher<F extends (...a: any[]) => any>(
+  fn: F
+): FindReturnType<OverloadMap<F>, []> | undefined
+export function catcher<F extends (...a: any[]) => any, E>(
+  fn: F,
+  caughtValue: E
+): FindReturnType<OverloadMap<F>, []> | E
+export function catcher<F extends (...a: any[]) => any, E>(
+  fn: F,
+  caughtValue?: E
+) {
   const originalStackTraceLimit = Error.stackTraceLimit
-  Error.stackTraceLimit = 0
+  /* c8 ignore next */
+  if (hasSTL) Error.stackTraceLimit = 0
   try {
     return fn()
   } catch {
     return caughtValue
     /* c8 ignore next */
   } finally {
-    Error.stackTraceLimit = originalStackTraceLimit
+    /* c8 ignore next */
+    if (hasSTL) Error.stackTraceLimit = originalStackTraceLimit
   }
 }
-// the urge to somehow put a Y template param in the middle up there to make
-// a JD Salinger reference is *overwhelming*.
 
 /**
  * Wrap the supplied function, returning a function that is the equivalent of
@@ -45,7 +60,9 @@ export function catchWrap<
   return <P extends unknown[]>(
     ...a: P
   ): FindReturnType<OverloadMap<F>, P> | E =>
-    catcher(() => fn(...a), caughtValue)
+    catcher(() => fn(...a), caughtValue) as
+      | FindReturnType<OverloadMap<F>, P>
+      | E
 }
 
 // What follows below is some type gymnastics required to preserve the set of

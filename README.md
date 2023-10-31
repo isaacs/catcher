@@ -23,11 +23,11 @@ const resultOr99 = return99onFailure(234)
 ```
 
 Properly supports types for the returned function if the function
-being wrapped has up to 10 overload signatures, but the
-parameters and return types are each squashed into a single
-tuple. For example:
+being wrapped has up to 10 overload signatures, adding the type
+of the `caughtValue` (or undefined if not provided) to the return
+type of each signature. For example:
 
-```js
+```ts
 function x(): boolean
 function x(s: string): string
 function x(s?: string) {
@@ -37,7 +37,10 @@ function x(s?: string) {
 }
 
 const wrapped = catchWrap(x, 99)
-// wrapped is now (...a: [] | [string]) => boolean | string | 99
+const b = wrapped()
+//    ^? - boolean | 99
+const z = wrapped('y')
+//    ^? - string | 99
 ```
 
 See [the typedocs](https://isaacs.github.io/catcher) for detailed

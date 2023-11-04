@@ -1,6 +1,6 @@
 {
   "name": "@isaacs/catcher",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Call a function and catch any errors it throws",
   "license": "BlueOak-1.0.0",
   "type": "module",

@@ -69,10 +69,12 @@ export function catchWrap<
 // signatures in the function interface when it has multiple overloads.
 
 /**
- * Turn an overload function into a `[Parameters,ReturnType][]` list.
- * Always contains 10 entries, any that do not correspond to a defined
- * function signature are `[never, unknown]`. These are filtered out in
- * the subsequent step.
+ * Turn an overload function into a `[Parameters,ReturnType][]` list. Always
+ * contains 10 entries, any that do not correspond to a defined function
+ * signature are sometimes `[never, unknown]`. and sometimes just fail to
+ * extend. Haven't figured out why it works sometimes one way and sometimes
+ * another. These are filtered out in the subsequent step if it matches the
+ * first type.
  */
 export type OverloadMapRaw<F> = F extends {
   (...a: infer A0): infer R0
@@ -98,6 +100,125 @@ export type OverloadMapRaw<F> = F extends {
       [NeverUnknown<A8>, R8],
       [NeverUnknown<A9>, R9]
     ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+      (...a: infer A3): infer R3
+      (...a: infer A4): infer R4
+      (...a: infer A5): infer R5
+      (...a: infer A6): infer R6
+      (...a: infer A7): infer R7
+      (...a: infer A8): infer R8
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2],
+      [NeverUnknown<A3>, R3],
+      [NeverUnknown<A4>, R4],
+      [NeverUnknown<A5>, R5],
+      [NeverUnknown<A6>, R6],
+      [NeverUnknown<A7>, R7],
+      [NeverUnknown<A8>, R8]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+      (...a: infer A3): infer R3
+      (...a: infer A4): infer R4
+      (...a: infer A5): infer R5
+      (...a: infer A6): infer R6
+      (...a: infer A7): infer R7
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2],
+      [NeverUnknown<A3>, R3],
+      [NeverUnknown<A4>, R4],
+      [NeverUnknown<A5>, R5],
+      [NeverUnknown<A6>, R6],
+      [NeverUnknown<A7>, R7]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+      (...a: infer A3): infer R3
+      (...a: infer A4): infer R4
+      (...a: infer A5): infer R5
+      (...a: infer A6): infer R6
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2],
+      [NeverUnknown<A3>, R3],
+      [NeverUnknown<A4>, R4],
+      [NeverUnknown<A5>, R5],
+      [NeverUnknown<A6>, R6]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+      (...a: infer A3): infer R3
+      (...a: infer A4): infer R4
+      (...a: infer A5): infer R5
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2],
+      [NeverUnknown<A3>, R3],
+      [NeverUnknown<A4>, R4],
+      [NeverUnknown<A5>, R5]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+      (...a: infer A3): infer R3
+      (...a: infer A4): infer R4
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2],
+      [NeverUnknown<A3>, R3],
+      [NeverUnknown<A4>, R4]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+      (...a: infer A3): infer R3
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2],
+      [NeverUnknown<A3>, R3]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+      (...a: infer A2): infer R2
+    }
+  ? [
+      [NeverUnknown<A0>, R0],
+      [NeverUnknown<A1>, R1],
+      [NeverUnknown<A2>, R2]
+    ]
+  : F extends {
+      (...a: infer A0): infer R0
+      (...a: infer A1): infer R1
+    }
+  ? [[NeverUnknown<A0>, R0], [NeverUnknown<A1>, R1]]
+  : F extends (...a: infer A0) => infer R0
+  ? [[NeverUnknown<A0>, R0]]
   : never
 
 /**

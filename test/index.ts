@@ -13,11 +13,11 @@ t.test('catcher()', t => {
   t.equal(catcher(thrower), undefined)
   t.equal(
     catcher(() => thrower(''), 123),
-    123
+    123,
   )
   t.equal(
     catcher(() => thrower('123'), 123),
-    true
+    true,
   )
   t.end()
 })
@@ -34,25 +34,22 @@ t.test('catchWrap', t => {
   t.end()
 })
 
-t.test(
-  'preserve stack if Error.stackTraceLimit not a number',
-  async t => {
-    const stl = Error.stackTraceLimit
-    //@ts-expect-error
-    Error.stackTraceLimit = 'blorp'
-    const { catcher } = await import('../dist/esm/index.js')
-    Error.stackTraceLimit = stl
-    const foo = () => {
-      try {
-        bar()
-      } catch (er) {
-        t.match(String((er as Error).stack), /bar/, 'got a stack')
-        throw er
-      }
+t.test('preserve stack if Error.stackTraceLimit not a number', async t => {
+  const stl = Error.stackTraceLimit
+  //@ts-expect-error
+  Error.stackTraceLimit = 'blorp'
+  const { catcher } = await import('../dist/esm/index.js')
+  Error.stackTraceLimit = stl
+  const foo = () => {
+    try {
+      bar()
+    } catch (er) {
+      t.match(String((er as Error).stack), /bar/, 'got a stack')
+      throw er
     }
-    const bar = () => {
-      throw new Error('do not delete me!')
-    }
-    t.equal(catcher(foo, 420), 420)
   }
-)
+  const bar = () => {
+    throw new Error('do not delete me!')
+  }
+  t.equal(catcher(foo, 420), 420)
+})

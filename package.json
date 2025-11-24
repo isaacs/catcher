@@ -16,25 +16,14 @@
     "presnap": "npm run prepare",
     "test": "tap",
     "snap": "tap",
-    "format": "prettier --write . --loglevel warn --cache",
+    "format": "prettier --write . --log-level warn --cache",
     "typedoc": "typedoc"
   },
-  "prettier": {
-    "semi": false,
-    "printWidth": 70,
-    "tabWidth": 2,
-    "useTabs": false,
-    "singleQuote": true,
-    "jsxSingleQuote": false,
-    "bracketSameLine": true,
-    "arrowParens": "avoid",
-    "endOfLine": "lf"
-  },
   "devDependencies": {
-    "prettier": "^2.8.8",
-    "tap": "^18.5.7",
-    "tshy": "^1.7.0",
-    "typedoc": "^0.25.3"
+    "prettier": "^3.6.2",
+    "tap": "^21.1.6",
+    "tshy": "^3.1.0",
+    "typedoc": "^0.28.14"
   },
   "tshy": {
     "exports": {
@@ -56,5 +45,6 @@
     }
   },
   "main": "./dist/commonjs/index.js",
-  "types": "./dist/commonjs/index.d.ts"
+  "types": "./dist/commonjs/index.d.ts",
+  "module": "./dist/esm/index.js"
 }

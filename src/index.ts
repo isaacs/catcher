@@ -1,3 +1,4 @@
+// oxlint-disable no-explicit-any
 const stlProp = Object.getOwnPropertyDescriptor(Error, 'stackTraceLimit')
 const hasSTL =
   stlProp && stlProp.writable && typeof stlProp.value === 'number'

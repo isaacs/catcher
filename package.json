@@ -17,19 +17,26 @@
     "test": "tap",
     "snap": "tap",
     "format": "prettier --write . --log-level warn --cache",
-    "typedoc": "typedoc"
+    "typedoc": "typedoc",
+    "lint": "oxlint --fix src test",
+    "postsnap": "npm run lint",
+    "postlint": "npm run format"
   },
   "devDependencies": {
-    "prettier": "^3.6.2",
-    "tap": "^21.1.6",
-    "tshy": "^3.1.0",
-    "typedoc": "^0.28.14"
+    "@types/node": "^25.7.0",
+    "oxlint": "^1.64.0",
+    "oxlint-tsgolint": "^0.22.1",
+    "prettier": "^3.8.3",
+    "tap": "^21.7.2",
+    "tshy": "^4.1.2",
+    "typedoc": "^0.28.19"
   },
   "tshy": {
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts"
-    }
+    },
+    "selfLink": false
   },
   "exports": {
     "./package.json": "./package.json",
